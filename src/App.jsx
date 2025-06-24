@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import EcommerceHero from './components/EcommerceHero.jsx'
-import Header from './components/Header.jsx'
+import EcommerceHero from './components/sections/EcommerceHero.jsx'
+import Header from './components/sections/Header.jsx'
+import NewArrivals from './components/sections/NewArrivals.jsx'
 
 import './App.css'
 
@@ -10,6 +11,7 @@ function App() {
     <>
     <Header />
     <EcommerceHero />
+    <NewArrivals />
 
     </>
   )

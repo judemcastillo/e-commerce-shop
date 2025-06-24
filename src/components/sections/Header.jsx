@@ -1,61 +1,64 @@
-import React, { useState } from "react";
-import { Search, ShoppingCart, Heart, User, Menu, X } from "lucide-react";
+import { useState } from "react";
+import { ShoppingCart, Heart, User, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function Header() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	return (
 		<nav className="fixed z-50 bg-transparent w-full backdrop-blur-sm border-b border-white/20">
-			<div className="container mx-auto px-8 py-5 flex items-center justify-center w-full">
+			<div className="md:container mx-auto px-10 py-5 flex items-center justify-center w-full">
 				<div className="flex items-center justify-between gap-3 w-full ">
 					{/* Left Navigation */}
-                    <div className="text-white"><h2>FakeShop</h2></div>
-					<div className="hidden md:flex items-center justify-between gap-8">
-						<a
-							href="#"
-							className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
-						>
-							Home
-						</a>
-						<a
-							href="#"
-							className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
-						>
-							Shop
-						</a>
-						<a
-							href="#"
-							className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
-						>
-							About Us
-						</a>
-						<a
-							href="#"
-							className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
-						>
-							Contact Us
-						</a>
+					<div className="text-white">
+						<h1 className="font-bold text-2xl">
+							<Link to="/">Fake/Shop</Link>
+						</h1>
 					</div>
+					<div className="flex gap-20">
+						<div className="hidden md:flex items-center justify-between gap-8">
+							<a
+								href="#"
+								className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
+							>
+								Home
+							</a>
+							<Link
+								to="Shop"
+								className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
+							>
+								Shop
+							</Link>
+							<a
+								href="#"
+								className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
+							>
+								About
+							</a>
+							<a
+								href="#"
+								className="text-white hover:text-gray-300 font-medium transition-colors duration-300"
+							>
+								Contact
+							</a>
+						</div>
 
-					{/* Right Icons */}
-					<div className="sm:hidden md:flex items-center gap-4">
-						<button className="text-white hover:text-gray-300 transition-colors duration-300 p-2">
-							<Search className="w-5 h-5" />
-						</button>
+						{/* Right Icons */}
+						<div className="sm:hidden md:flex items-center gap-4">
+							<button className="text-white hover:text-gray-300 transition-colors duration-300 p-2 relative">
+								<Heart className="w-5 h-5" />
+							</button>
 
-						<button className="text-white hover:text-gray-300 transition-colors duration-300 p-2 relative">
-							<Heart className="w-5 h-5" />
-						</button>
+							<button className="text-white hover:text-gray-300 transition-colors duration-300 p-2 relative">
+								<ShoppingCart className="w-5 h-5" />
+								<span className="absolute -top-1 -right-1 w-4 h-4 bg-white text-black text-xs rounded-full flex items-center justify-center font-bold">
+									0
+								</span>
+							</button>
 
-						<button className="text-white hover:text-gray-300 transition-colors duration-300 p-2 relative">
-							<ShoppingCart className="w-5 h-5" />
-							<span className="absolute -top-1 -right-1 w-4 h-4 bg-white text-black text-xs rounded-full flex items-center justify-center font-bold">
-								0
-							</span>
-						</button>
-
-						<button className="text-white hover:text-gray-300 transition-colors duration-300 p-2">
-							<User className="w-5 h-5" />
-						</button>
+							<button className="text-white hover:text-gray-300 transition-colors duration-300 p-2">
+								<User className="w-5 h-5" />
+							</button>
+						</div>
 					</div>
 
 					{/* Mobile Menu Button */}
@@ -96,19 +99,16 @@ function Header() {
 							href="#"
 							className="block text-white hover:text-gray-300 font-medium"
 						>
-							About Us
+							About
 						</a>
 						<a
 							href="#"
 							className="block text-white hover:text-gray-300 font-medium"
 						>
-							Contact Us
+							Contact
 						</a>
 
 						<div className="flex items-center gap-4 pt-2 border-t border-white/20">
-							<button className="text-white p-2">
-								<Search className="w-5 h-5" />
-							</button>
 							<button className="text-white p-2">
 								<Heart className="w-5 h-5" />
 							</button>

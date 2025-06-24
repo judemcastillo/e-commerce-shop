@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ShoppingCart, Heart, User, Menu, X } from 'lucide-react';
+import Reveal from '../animations/Reveal.jsx';
 
 export default function EcommerceHero() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function EcommerceHero() {
       
       {/* Fixed Background Image */}
       <div 
-        className="fixed inset-0 bg-cover bg-center bg-no-repeat"
+        className="fixed h-screen block inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')`
         }}
@@ -27,9 +27,8 @@ export default function EcommerceHero() {
 
       {/* Main Hero Content */}
       <div className="relative z-40 flex items-center content-center justify-center px-6">
-        <div className={`text-center text-white max-w-4xl mx-auto transform transition-all duration-1000 ${
-          isVisible ? 'translate-y-1 opacity-100' : 'translate-y-8 opacity-0'
-        }`}>
+        <Reveal className="text-center text-white max-w-4xl mx-auto">
+         
           
 
           {/* Main Headline */}
@@ -48,7 +47,7 @@ export default function EcommerceHero() {
           <button className="inline-block px-12 py-4 border-2 border-white cursor-pointer text-white font-medium tracking-wider uppercase hover:bg-white hover:text-black transition-all duration-300 transform hover:scale-105">
             SHOP NOW
           </button>
-        </div>
+        </Reveal>
       </div>
       
     </div>
