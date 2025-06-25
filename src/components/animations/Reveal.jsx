@@ -5,7 +5,7 @@ const Reveal = ({ children, className, delay = 0 }) => {
   const ref = useRef(null);
 
   // Wait until 100% in view, and only fire once
-  const isInView = useInView(ref, { once: true, amount: 0.8});
+  const isInView = useInView(ref, { once: true, amount: 0.5});
 
   return (
     <motion.div
@@ -18,7 +18,7 @@ const Reveal = ({ children, className, delay = 0 }) => {
         ease: "easeOut",
         delay,
       }}
-      viewport={{ amount: 0.8 }}
+      
     >
       {children}
     </motion.div>

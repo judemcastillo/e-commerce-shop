@@ -3,11 +3,6 @@ import Reveal from '../animations/Reveal.jsx';
 
 export default function EcommerceHero() {
   
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
 
   return (
     <div className="h-screen relative flex flex-col items-center justify-center overflow-hidden">

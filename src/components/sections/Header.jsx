@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function Header() {
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 	return (
-		<nav className="fixed z-50 bg-transparent w-full backdrop-blur-sm border-b border-white/20">
+		<nav className="absolute z-50 bg-transparent w-full backdrop-blur-sm border-b border-white/20">
 			<div className="md:container mx-auto px-10 py-5 flex items-center justify-center w-full">
 				<div className="flex items-center justify-between gap-3 w-full ">
 					{/* Left Navigation */}
