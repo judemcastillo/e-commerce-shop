@@ -1,2 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap");
 @import "tailwindcss";
+@import "keen-slider/keen-slider.min.css";
 
+@font-face {
+	font-family: "Domine";
+	src: url("https://fonts.googleapis.com/css2?family=Domine:wght@400..700&display=swap");
+}

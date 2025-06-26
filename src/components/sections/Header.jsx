@@ -10,8 +10,8 @@ function Header() {
 				<div className="flex items-center justify-between gap-3 w-full ">
 					{/* Left Navigation */}
 					<div className="text-white">
-						<h1 className="font-bold text-2xl">
-							<Link to="/">Fake/Shop</Link>
+						<h1 className="font-bold text-2xl ">
+							<Link to="/"><span className="font-['Domine']">Fake</span>/<span className="font-sans">Shop</span></Link>
 						</h1>
 					</div>
 					<div className="flex gap-20">
