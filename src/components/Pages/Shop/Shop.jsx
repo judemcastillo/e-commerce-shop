@@ -1,8 +1,10 @@
-import Header from "../sections/Header.jsx";
+import Header from "../../sections/Header.jsx";
+import { ShopProvider } from "../../context/ShopContext.jsx";
 
 function Shop() {
 	return (
 		<>
+		<ShopProvider>
             <Header />
             {/* Main Shop Content */}
 			<div className="flex flex-col items-center justify-center h-screen bg-slate-900 text-white px-4">
@@ -11,6 +13,7 @@ function Shop() {
 					Welcome to the shop! Here you can find various products.
 				</p>
 			</div>
+			</ShopProvider>
 		</>
 	);
 }

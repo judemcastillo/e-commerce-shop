@@ -17,25 +17,36 @@ export const ShopProvider = ({ children }) => {
   const [orders, setOrders] = useLocalStorage('orders', []);
   const [user, setUser] = useLocalStorage('user', null);
 
+  // Ensure arrays are always arrays (in case localStorage returns null/undefined)
+  useEffect(() => {
+    if (!Array.isArray(cart)) setCart([]);
+    if (!Array.isArray(wishlist)) setWishlist([]);
+    if (!Array.isArray(orders)) setOrders([]);
+  }, []);
+
   // Cart functions
   const addToCart = (product, quantity = 1) => {
     setCart(currentCart => {
-      const existingItem = currentCart.find(item => item.id === product.id);
+      const safeCart = Array.isArray(currentCart) ? currentCart : [];
+      const existingItem = safeCart.find(item => item.id === product.id);
       
       if (existingItem) {
-        return currentCart.map(item =>
+        return safeCart.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       }
       
-      return [...currentCart, { ...product, quantity }];
+      return [...safeCart, { ...product, quantity }];
     });
   };
 
   const removeFromCart = (productId) => {
-    setCart(currentCart => currentCart.filter(item => item.id !== productId));
+    setCart(currentCart => {
+      const safeCart = Array.isArray(currentCart) ? currentCart : [];
+      return safeCart.filter(item => item.id !== productId);
+    });
   };
 
   const updateCartQuantity = (productId, quantity) => {
@@ -44,11 +55,12 @@ export const ShopProvider = ({ children }) => {
       return;
     }
     
-    setCart(currentCart =>
-      currentCart.map(item =>
+    setCart(currentCart => {
+      const safeCart = Array.isArray(currentCart) ? currentCart : [];
+      return safeCart.map(item =>
         item.id === productId ? { ...item, quantity } : item
-      )
-    );
+      );
+    });
   };
 
   const clearCart = () => {
@@ -56,30 +68,35 @@ export const ShopProvider = ({ children }) => {
   };
 
   const getCartTotal = () => {
-    return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const safeCart = Array.isArray(cart) ? cart : [];
+    return safeCart.reduce((total, item) => total + (item.price * item.quantity), 0);
   };
 
   const getCartCount = () => {
-    return cart.reduce((count, item) => count + item.quantity, 0);
+    const safeCart = Array.isArray(cart) ? cart : [];
+    return safeCart.reduce((count, item) => count + item.quantity, 0);
   };
 
   // Wishlist functions
   const addToWishlist = (product) => {
     setWishlist(currentWishlist => {
-      const exists = currentWishlist.some(item => item.id === product.id);
-      if (exists) return currentWishlist;
-      return [...currentWishlist, product];
+      const safeWishlist = Array.isArray(currentWishlist) ? currentWishlist : [];
+      const exists = safeWishlist.some(item => item.id === product.id);
+      if (exists) return safeWishlist;
+      return [...safeWishlist, product];
     });
   };
 
   const removeFromWishlist = (productId) => {
-    setWishlist(currentWishlist => 
-      currentWishlist.filter(item => item.id !== productId)
-    );
+    setWishlist(currentWishlist => {
+      const safeWishlist = Array.isArray(currentWishlist) ? currentWishlist : [];
+      return safeWishlist.filter(item => item.id !== productId);
+    });
   };
 
   const isInWishlist = (productId) => {
-    return wishlist.some(item => item.id === productId);
+    const safeWishlist = Array.isArray(wishlist) ? wishlist : [];
+    return safeWishlist.some(item => item.id === productId);
   };
 
   const toggleWishlist = (product) => {
@@ -101,7 +118,10 @@ export const ShopProvider = ({ children }) => {
       ...orderData
     };
     
-    setOrders(currentOrders => [...currentOrders, newOrder]);
+    setOrders(currentOrders => {
+      const safeOrders = Array.isArray(currentOrders) ? currentOrders : [];
+      return [...safeOrders, newOrder];
+    });
     clearCart();
     return newOrder;
   };
@@ -117,7 +137,7 @@ export const ShopProvider = ({ children }) => {
 
   const value = {
     // Cart
-    cart,
+    cart: Array.isArray(cart) ? cart : [],
     addToCart,
     removeFromCart,
     updateCartQuantity,
@@ -126,14 +146,14 @@ export const ShopProvider = ({ children }) => {
     getCartCount,
     
     // Wishlist
-    wishlist,
+    wishlist: Array.isArray(wishlist) ? wishlist : [],
     addToWishlist,
     removeFromWishlist,
     isInWishlist,
     toggleWishlist,
     
     // Orders
-    orders,
+    orders: Array.isArray(orders) ? orders : [],
     createOrder,
     
     // User

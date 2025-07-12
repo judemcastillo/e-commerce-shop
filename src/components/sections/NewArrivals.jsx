@@ -3,10 +3,7 @@ import Reveal from "../animations/Reveal.jsx";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {
-	ChevronLeft,
-	ChevronRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import ProductCard from "./ProductCard.jsx";
 import useFetchProducts from "../hooks/useFetchProducts.js";
 
@@ -60,10 +57,9 @@ export default function NewArrivals() {
 		sliderRef.current?.slickNext();
 	}, []);
 
-	// Enhanced loading state
 	if (loading) {
 		return (
-			<section className="py-20">
+			<section className="relative bg-gradient-to-br from-gray-50 to-white py-20">
 				<div className="max-w-7xl mx-auto px-4">
 					<div className="text-center mb-12">
 						<div className="w-64 h-8 bg-gray-200 rounded-lg mx-auto mb-4 animate-pulse"></div>

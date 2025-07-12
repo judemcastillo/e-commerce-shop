@@ -1,7 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ShoppingCart, Star, X, Plus, Minus } from "lucide-react";
+import { Heart, ShoppingCart, Star, X, Plus, Minus, Check } from "lucide-react";
+import { useToast } from "../context/ToastContext";
 
 export default function ProductModal({
 	product,
@@ -9,6 +10,7 @@ export default function ProductModal({
 	onClose,
 	isWishlisted,
 	onWishlistToggle,
+	onAddToCart,
 }) {
 	const [quantity, setQuantity] = useState(1);
 
@@ -37,6 +39,13 @@ export default function ProductModal({
 		};
 	}, [isOpen, onClose]);
 
+	// Reset quantity when modal closes
+	useEffect(() => {
+		if (!isOpen) {
+			setQuantity(1);
+		}
+	}, [isOpen]);
+
 	const handleIncreaseQuantity = () => {
 		setQuantity((prev) => prev + 1);
 	};
@@ -45,9 +54,27 @@ export default function ProductModal({
 		setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 	};
 
+	const handleAddToCart = () => {
+		if (onAddToCart) {
+			onAddToCart(quantity);
+		}
+	};
+
 	// Large star rating for modal
 	const largeStarRating = useMemo(() => {
-		const rating = product.rating?.rate || 0;
+		// Add null checks for product and rating
+		if (!product || !product.rating) {
+			return (
+				<div className="flex items-center gap-2">
+					{[...Array(5)].map((_, i) => (
+						<Star key={i} className="w-6 h-6 text-gray-300" />
+					))}
+					<span className="text-gray-600 ml-2">No ratings yet</span>
+				</div>
+			);
+		}
+
+		const rating = product.rating.rate || 0;
 		const fullStars = Math.floor(rating);
 		const hasHalfStar = rating % 1 >= 0.5;
 
@@ -66,11 +93,11 @@ export default function ProductModal({
 					/>
 				))}
 				<span className="text-gray-600 ml-2">
-					{rating.toFixed(1)} ({product.rating?.count || 0} reviews)
+					{rating.toFixed(1)} ({product.rating.count || 0} reviews)
 				</span>
 			</div>
 		);
-	}, [product.rating]);
+	}, [product]);
 
 	// Animation variants
 	const backdropVariants = {
@@ -90,9 +117,7 @@ export default function ProductModal({
 			scale: 1,
 			y: 0,
 			transition: {
-				
 				duration: 0.5,
-				
 			},
 		},
 		exit: {
@@ -257,6 +282,7 @@ export default function ProductModal({
 								{/* Action Buttons */}
 								<motion.div className="flex gap-4" variants={itemVariants}>
 									<motion.button
+										onClick={handleAddToCart}
 										className="flex-1 bg-gray-900 text-white py-3 rounded-full font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 cursor-pointer"
 										whileHover={{ scale: 1.02 }}
 										whileTap={{ scale: 0.98 }}
@@ -283,6 +309,17 @@ export default function ProductModal({
 								</motion.div>
 
 								{/* Additional Info */}
+								<motion.div
+									className="mt-6 pt-6 border-t border-gray-300"
+									variants={itemVariants}
+								>
+									<div className="space-y-2 text-sm text-gray-600">
+										<div className="flex justify-between">
+											<span className="font-medium">Subtotal:</span>
+											<span>${(product.price * quantity).toFixed(2)}</span>
+										</div>
+									</div>
+								</motion.div>
 							</motion.div>
 						</div>
 					</motion.div>

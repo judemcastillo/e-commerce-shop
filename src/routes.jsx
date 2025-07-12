@@ -1,5 +1,5 @@
 import App from "./App";
-import Shop from "./components/Pages/Shop";
+import Shop from "./components/Pages/Shop/Shop.jsx";
 
 const routes = [
   {
