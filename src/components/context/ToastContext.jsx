@@ -59,7 +59,7 @@ const ToastContainer = ({ toasts, removeToast }) => {
 
 // Individual Toast Component
 const Toast = ({ toast, onClose }) => {
-  const { message, type } = toast;
+  const { message, type, duration } = toast;
 
   const icons = {
     success: <CheckCircle className="w-5 h-5" />,
@@ -72,7 +72,15 @@ const Toast = ({ toast, onClose }) => {
     success: 'bg-green-500',
     error: 'bg-red-500',
     info: 'bg-blue-500',
-    cart: 'bg-blue-600'
+    cart: 'bg-slate-400',
+  };
+
+  // Progress bar colors (slightly brighter than main colors)
+  const progressColors = {
+    success: 'bg-green-400',
+    error: 'bg-red-400',
+    info: 'bg-blue-400',
+    cart: 'bg-slate-300',
   };
 
   return (
@@ -81,20 +89,36 @@ const Toast = ({ toast, onClose }) => {
       animate={{ opacity: 1, x: 0, scale: 1 }}
       exit={{ opacity: 0, x: 100, scale: 0.8 }}
       transition={{ type: "spring", stiffness: 500, damping: 40 }}
-      className={`${colors[type] || colors.info} text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px] max-w-md`}
+      className={`relative ${colors[type] || colors.info} text-white shadow-lg min-w-[400px] max-w-md overflow-hidden`}
     >
-      <div className="flex-shrink-0">
-        {icons[type] || icons.info}
+      {/* Toast Content */}
+      <div className="px-4 py-5 flex items-center gap-3">
+        <div className="flex-shrink-0">
+          {icons[type] || icons.info}
+        </div>
+        <p className="flex-1 text-sm font-medium">{message}</p>
+        <motion.button
+          onClick={onClose}
+          className="flex-shrink-0 ml-2 hover:bg-white/20 rounded p-1 transition-colors"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+        >
+          <X className="w-4 h-4" />
+        </motion.button>
       </div>
-      <p className="flex-1 text-sm font-medium">{message}</p>
-      <motion.button
-        onClick={onClose}
-        className="flex-shrink-0 ml-2 hover:bg-white/20 rounded p-1 transition-colors"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-      >
-        <X className="w-4 h-4" />
-      </motion.button>
+
+      {/* Progress Bar */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/10">
+        <motion.div
+          className={`h-full ${progressColors[type] || progressColors.info} ml-auto`}
+          initial={{ width: "100%" }}
+          animate={{ width: "0%" }}
+          transition={{
+            duration: duration / 1000, 
+            ease: "linear"
+          }}
+        />
+      </div>
     </motion.div>
   );
 };
