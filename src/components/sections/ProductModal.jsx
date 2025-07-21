@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, ShoppingCart, Star, X, Plus, Minus, Check } from "lucide-react";
-import { useToast } from "../context/ToastContext";
+import { useShop } from "../context/ShopContext";
 
 export default function ProductModal({
 	product,
@@ -13,6 +13,11 @@ export default function ProductModal({
 	onAddToCart,
 }) {
 	const [quantity, setQuantity] = useState(1);
+	const { cart } = useShop();
+
+	// Get current quantity in cart for this product
+	const cartItem = cart.find((item) => item.id === product?.id);
+	const quantityInCart = cartItem?.quantity || 0;
 
 	useEffect(() => {
 		// Handle body scroll and escape key
@@ -56,7 +61,7 @@ export default function ProductModal({
 
 	const handleAddToCart = () => {
 		if (onAddToCart) {
-			onAddToCart(quantity);
+			onAddToCart(product, quantity);
 		}
 	};
 
@@ -168,7 +173,7 @@ export default function ProductModal({
 
 					{/* Modal Content */}
 					<motion.div
-						className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+						className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full h-[90vh] overflow-hidden flex flex-col"
 						variants={modalVariants}
 						initial="hidden"
 						animate="visible"
@@ -184,143 +189,143 @@ export default function ProductModal({
 							<X className="w-5 h-5" />
 						</motion.button>
 
-						<div className="flex flex-col md:flex-row h-full">
+						<div className="flex flex-col md:flex-row h-full overflow-hidden">
 							{/* Image Section */}
-							<motion.div
-								className="md:w-1/2 bg-white p-8 flex items-center justify-center"
-								initial={{ opacity: 0, x: -50 }}
-								animate={{ opacity: 1, x: 0 }}
-								transition={{ delay: 0.2 }}
-							>
-								<motion.img
+							<div className="md:w-1/2 bg-white p-8 flex items-center justify-center flex-shrink-0">
+								<img
 									src={product.image}
 									alt={product.title}
 									className="max-w-full max-h-96 object-contain"
-									initial={{ scale: 0.8 }}
-									animate={{ scale: 1 }}
-									transition={{ delay: 0.3, type: "spring" }}
 								/>
-							</motion.div>
+							</div>
 
-							{/* Details Section */}
-							<motion.div
-								className="md:w-1/2 p-8 overflow-y-auto bg-slate-100"
-								variants={contentVariants}
-								initial="hidden"
-								animate="visible"
-							>
-								{/* Category */}
-								<motion.div
-									className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2"
-									variants={itemVariants}
-								>
-									{product.category}
-								</motion.div>
-
-								{/* Title */}
-								<motion.h2
-									className="text-2xl font-bold text-gray-900 mb-4"
-									variants={itemVariants}
-								>
-									{product.title}
-								</motion.h2>
-
-								{/* Rating */}
-								<motion.div className="mb-6" variants={itemVariants}>
-									{largeStarRating}
-								</motion.div>
-
-								{/* Price */}
-								<motion.div
-									className="text-3xl font-bold text-gray-900 mb-6"
-									variants={itemVariants}
-								>
-									${product.price}
-								</motion.div>
-
-								{/* Description */}
-								<motion.div className="mb-6" variants={itemVariants}>
-									<h3 className="font-semibold text-gray-900 mb-2">
-										Description
-									</h3>
-									<p className="text-gray-600 leading-relaxed">
-										{product.description}
-									</p>
-								</motion.div>
-
-								{/* Quantity Selector */}
-								<motion.div className="mb-6" variants={itemVariants}>
-									<h3 className="font-semibold text-gray-900 mb-2">Quantity</h3>
-									<div className="flex items-center gap-4">
-										<motion.button
-											onClick={handleDecreaseQuantity}
-											className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-colors  cursor-pointer"
-											whileHover={{ scale: 1.1 }}
-											whileTap={{ scale: 0.9 }}
-										>
-											<Minus className="w-4 h-4" />
-										</motion.button>
-										<motion.span
-											className="text-xl font-semibold w-12 text-center"
-											key={quantity}
-											initial={{ opacity: 0, y: -10 }}
-											animate={{ opacity: 1, y: 0 }}
-										>
-											{quantity}
-										</motion.span>
-										<motion.button
-											onClick={handleIncreaseQuantity}
-											className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-colors cursor-pointer"
-											whileHover={{ scale: 1.1 }}
-											whileTap={{ scale: 0.9 }}
-										>
-											<Plus className="w-4 h-4" />
-										</motion.button>
+							{/* Details Section - Fixed height and overflow */}
+							<div className="md:w-1/2 bg-slate-100 flex flex-col h-full overflow-hidden">
+								<div className="p-8 overflow-y-auto">
+									{/* Category */}
+									<div className="text-sm font-medium text-blue-600 uppercase tracking-wider mb-2">
+										{product.category}
 									</div>
-								</motion.div>
 
-								{/* Action Buttons */}
-								<motion.div className="flex gap-4" variants={itemVariants}>
-									<motion.button
-										onClick={handleAddToCart}
-										className="flex-1 bg-gray-900 text-white py-3 rounded-full font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 cursor-pointer"
-										whileHover={{ scale: 1.02 }}
-										whileTap={{ scale: 0.98 }}
-									>
-										<ShoppingCart className="w-5 h-5" />
-										Add to Cart
-									</motion.button>
-									<motion.button
-										onClick={onWishlistToggle}
-										className={`p-4 rounded-full  cursor-pointer transition-colors ${
-											isWishlisted
-												? "bg-red-500 text-white"
-												: "bg-gray-100 text-gray-700 hover:bg-red-500 hover:text-white"
-										}`}
-										whileHover={{ scale: 1.1 }}
-										whileTap={{ scale: 0.9 }}
-									>
-										<Heart
-											className={`w-5 h-5 ${
-												isWishlisted ? "fill-current" : ""
+									{/* Title */}
+									<h2 className="text-2xl font-bold text-gray-900 mb-4">
+										{product.title}
+									</h2>
+
+									{/* Rating */}
+									<div className="mb-6">{largeStarRating}</div>
+
+									{/* Price */}
+									<div className="text-3xl font-bold text-gray-900 mb-6">
+										${product.price}
+									</div>
+
+									{/* Cart Status */}
+									{quantityInCart > 0 && (
+										<div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center gap-3">
+											<div className="flex-shrink-0">
+												<div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+													<Check className="w-5 h-5 text-white" />
+												</div>
+											</div>
+											<div className="flex-1">
+												<p className="text-sm font-medium text-green-800">
+													Already in cart
+												</p>
+												<p className="text-sm text-green-600">
+													{quantityInCart}{" "}
+													{quantityInCart === 1 ? "item" : "items"} in your cart
+												</p>
+											</div>
+										</div>
+									)}
+
+									{/* Description */}
+									<div className="mb-6">
+										<h3 className="font-semibold text-gray-900 mb-2">
+											Description
+										</h3>
+										<p className="text-gray-600 leading-relaxed">
+											{product.description}
+										</p>
+									</div>
+
+									{/* Quantity Selector */}
+									<div className="mb-6">
+										<h3 className="font-semibold text-gray-900 mb-2">
+											{quantityInCart > 0 ? "Add More" : "Quantity"}
+										</h3>
+										<div className="flex items-center gap-4">
+											<button
+												onClick={handleDecreaseQuantity}
+												className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+												disabled={quantity <= 1}
+											>
+												<Minus className="w-4 h-4" />
+											</button>
+											<span className="text-xl font-semibold w-12 text-center">
+												{quantity}
+											</span>
+											<button
+												onClick={handleIncreaseQuantity}
+												className="rounded-full bg-gray-200 p-2 hover:bg-gray-300 transition-colors cursor-pointer"
+											>
+												<Plus className="w-4 h-4" />
+											</button>
+										</div>
+										{quantityInCart > 0 && (
+											<p className="text-sm text-gray-500 mt-2">
+												Total after adding: {quantityInCart + quantity} items
+											</p>
+										)}
+									</div>
+
+									{/* Action Buttons */}
+									<div className="flex gap-4">
+										<button
+											onClick={handleAddToCart}
+											className="flex-1 bg-gray-900 text-white py-3 rounded-full font-medium hover:bg-gray-800 transition-colors flex items-center justify-center gap-2 cursor-pointer"
+										>
+											<ShoppingCart className="w-5 h-5" />
+											{quantityInCart > 0
+												? `Add ${quantity} More`
+												: "Add to Cart"}
+										</button>
+										<button
+											onClick={onWishlistToggle}
+											className={`p-4 rounded-full cursor-pointer transition-colors ${
+												isWishlisted
+													? "bg-red-500 text-white"
+													: "bg-gray-100 text-gray-700 hover:bg-red-500 hover:text-white"
 											}`}
-										/>
-									</motion.button>
-								</motion.div>
+										>
+											<Heart
+												className={`w-5 h-5 ${
+													isWishlisted ? "fill-current" : ""
+												}`}
+											/>
+										</button>
+									</div>
 
-								{/* Additional Info */}
-								<motion.div
-									className="mt-6 pt-6 border-t border-gray-300"
-									variants={itemVariants}
-								>
-									<div className="space-y-2 text-sm text-gray-600">
-										<div className="flex justify-between">
-											<span className="font-medium">Subtotal:</span>
-											<span>${(product.price * quantity).toFixed(2)}</span>
+									{/* Additional Info */}
+									<div className="mt-6 pt-6 border-t border-gray-300">
+										<div className="space-y-2 text-sm text-gray-600">
+											<div className="flex justify-between">
+												<span className="font-medium">Subtotal:</span>
+												<span>${(product.price * quantity).toFixed(2)}</span>
+											</div>
+											{quantityInCart > 0 && (
+												<div className="flex justify-between text-green-600">
+													<span className="font-medium">Already in cart:</span>
+													<span>
+														${(product.price * quantityInCart).toFixed(2)}
+													</span>
+												</div>
+											)}
 										</div>
 									</div>
-								</motion.div>
-							</motion.div>
+								</div>
+							</div>
 						</div>
 					</motion.div>
 				</div>
