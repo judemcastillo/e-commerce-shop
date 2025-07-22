@@ -36,10 +36,8 @@ const ProductCard = ({ product }) => {
 		(e, quantity = 1) => {
 			e?.stopPropagation();
 
-			// Your context already handles quantity properly!
 			addToCart(product, quantity);
 
-			// Show appropriate toast based on quantity
 			if (quantity > 1) {
 				showToast(`Added ${quantity} × ${product.title} to cart!`, "success");
 			} else {

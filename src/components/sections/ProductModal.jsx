@@ -60,10 +60,10 @@ export default function ProductModal({
 	};
 
 	const handleAddToCart = () => {
-		if (onAddToCart) {
-			onAddToCart(product, quantity);
-		}
-	};
+    if (onAddToCart) {
+        onAddToCart(quantity); 
+    }
+};
 
 	// Large star rating for modal
 	const largeStarRating = useMemo(() => {
