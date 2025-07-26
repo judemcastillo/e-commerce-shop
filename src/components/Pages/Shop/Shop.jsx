@@ -6,6 +6,7 @@ import ProductCard from "../../sections/ProductCard.jsx";
 import { ShopProvider } from "../../context/ShopContext.jsx";
 import useFetchProducts from "../../hooks/useFetchProducts.js";
 import { ToastProvider } from "../../context/ToastContext";
+import Footer from "../../sections/Footer.jsx";
 
 function Shop() {
 	// Fetch all products by not passing a limit or passing a high number
@@ -87,8 +88,8 @@ function Shop() {
 						</div>
 
 						{/* Filter and Products Section */}
-						<div className="flex-1 bg-gray-50">
-							<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+						<div className="flex-1 bg-gray-50 pb-3">
+							<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-20">
 								{/* Filter Bar */}
 								<div className="mb-8">
 									<div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -288,6 +289,7 @@ function Shop() {
 					</div>
 				</ToastProvider>
 			</ShopProvider>
+			<Footer />
 		</>
 	);
 }

@@ -2,6 +2,7 @@ import Header from "../sections/Header";
 import { ToastProvider } from "../context/ToastContext";
 import { ShopProvider } from "../context/ShopContext";
 import { motion } from "framer-motion";
+import Footer from "../sections/Footer";
 
 function About() {
 	return (
@@ -46,6 +47,7 @@ function About() {
 					</div>
 				</ToastProvider>
 			</ShopProvider>
+			<Footer />
 		</>
 	);
 }
