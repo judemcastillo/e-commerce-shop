@@ -1,6 +1,6 @@
 # Fake/Shop - Modern E-Commerce Platform
 
-![Fake/Shop Banner](https://images.pexels.com/photos/1927259/pexels-photo-1927259.jpeg?auto=compress&cs=tinysrgb&w=1260&h=350&dpr=1)
+
 
 <div align="center">
 
