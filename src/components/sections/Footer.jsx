@@ -1,30 +1,101 @@
+import Reveal from "../animations/Reveal";
+import { Link } from "react-router-dom";
+import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
+
 export default function Footer() {
-  return (
-    <footer className="bg-black text-white  relative bottom-0 w-full ">
-      <div className="max-w-6xl mx-auto ">
-        {/* <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <h2 className="text-lg font-semibold">Stay Connected</h2>
-            <p className="text-sm">Subscribe to our newsletter for updates</p>
-          </div>
-          <form className="flex flex-col md:flex-row items-center gap-2">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="px-4 py-2 rounded-md bg-gray-800 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <button
-              type="submit"
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 rounded-md transition"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div> */}
-        <div className="py-2 border-t border-gray-700 text-center text-sm">
-          &copy; {new Date().getFullYear()} J Systems. All rights reserved.
-        </div>
-      </div>
-    </footer>
-  );
+	const currentYear = new Date().getFullYear();
+
+	const navLinks = [
+		{ name: "Home", path: "/" },
+		{ name: "Shop", path: "/shop" },
+		{ name: "About", path: "/about" },
+		{ name: "Contact", path: "/contact" }
+	];
+
+	const socialLinks = [
+		{ icon: Facebook, href: "https://facebook.com", label: "Facebook" },
+		{ icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+		{ icon: Youtube, href: "https://youtube.com", label: "YouTube" },
+		{ icon: Twitter, href: "https://twitter.com", label: "Twitter" }
+	];
+
+	return (
+		<footer className="bg-white/5 backdrop-blur-sm text-white relative w-full border-t border-white/10">
+			<div className="max-w-7xl mx-auto px-4">
+				{/* Main Footer Content */}
+				<Reveal direction="fade" delay={0.2}>
+					<div className="py-8 flex flex-col md:flex-row items-center justify-between">
+						{/* Logo */}
+						<div className="mb-6 md:mb-0">
+							<Link to="/" className="flex items-center">
+								<div className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center mr-3">
+									<span className="text-xs font-bold">FS</span>
+								</div>
+								<span className="text-xl font-light tracking-wider">FAKE/SHOP</span>
+							</Link>
+						</div>
+
+						{/* Navigation Links */}
+						<nav className="mb-6 md:mb-0">
+							<ul className="flex space-x-8">
+								{navLinks.map((link, index) => (
+									<Reveal
+										key={link.name}
+										direction="up"
+										delay={0.1}
+										stagger={true}
+										index={index}
+									>
+										<li>
+											<Link
+												to={link.path}
+												className="text-white/80 hover:text-white transition-colors duration-300 text-sm uppercase tracking-wider"
+											>
+												{link.name}
+											</Link>
+										</li>
+									</Reveal>
+								))}
+							</ul>
+						</nav>
+
+						{/* Social Links */}
+						<div className="flex space-x-4">
+							{socialLinks.map((social, index) => (
+								<Reveal
+									key={social.label}
+									direction="up"
+									delay={0.2}
+									stagger={true}
+									index={index}
+								>
+									<a
+										href={social.href}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="text-white/80 hover:text-white transition-colors duration-300"
+										aria-label={social.label}
+									>
+										<social.icon size={20} />
+									</a>
+								</Reveal>
+							))}
+						</div>
+					</div>
+				</Reveal>
+
+				{/* Divider */}
+				<div className="border-t border-white/10"></div>
+
+				{/* Copyright */}
+				<Reveal direction="fade" delay={0.4}>
+					<div className="py-4 text-center text-sm text-white/60">
+						Copyright © {currentYear} Fake/Shop. All rights reserved.
+					</div>
+				</Reveal>
+			</div>
+
+			
+		</footer>
+	);
 }
